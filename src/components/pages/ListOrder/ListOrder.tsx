@@ -7,29 +7,29 @@ import type { IOrder } from "../../../types/order";
 
 const ListOrder = () => {
   const [orders, setOrders] = useState([]);
-  // const [refetchOrder, setRefetchOrder] = useState(true);
+  const [refetchOrder, setRefetchOrder] = useState(true);
 
-  // useEffect(() => {
-  //   if (refetchOrder) {
-  //     const fetchOrder = async () => {
-  //       const result = await getOrders();
-  //       setOrders(result.data);
-  //     };
-  //     fetchOrder();
-  //     setRefetchOrder(false);
-  //   }
-  // }, [refetchOrder]);
   useEffect(() => {
-    const fetchOrders = async () => {
-      const result = await getOrders();
-      setOrders(result.data);
-    };
-    fetchOrders();
-  }, []);
+    if (refetchOrder) {
+      const fetchOrder = async () => {
+        const result = await getOrders();
+        setOrders(result.data);
+      };
+      fetchOrder();
+      // setRefetchOrder(false);                                                // di codingan sample harus diaktifkan
+    }
+  }, [refetchOrder]);
+  // useEffect(() => {                                                          // best practice dari chat GPT
+  //   const fetchOrders = async () => {
+  //     const result = await getOrders();
+  //     setOrders(result.data);
+  //   };
+  //   fetchOrders();
+  // }, []);
 
   const handleCompleteOrder = async (id: string) => {
     await updateOrder(id, {status: 'COMPLETED'}).then(() => {
-      // setRefetchOrder(true);                                                       // Perlu di perbaiki!!! 1.23.05
+      setRefetchOrder(true);                                                       // Perlu di perbaiki!!! 1.23.05
     })
   }
 
